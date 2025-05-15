@@ -1,0 +1,74 @@
+<div class="rated-movies-container">
+  <h2>Értékelt Filmjeim</h2>
+
+  <div class="controls">
+    <!-- Szűrési legördülő menü -->
+    <select (change)="filterByRating($event)" class="filter-select" [disabled]="isLoading">
+      <option value="">Összes értékelés</option>
+      <option value="1">1 vagy magasabb</option>
+      <option value="2">2 vagy magasabb</option>
+      <option value="3">3 vagy magasabb</option>
+      <option value="4">4 vagy magasabb</option>
+      <option value="5">5 vagy magasabb</option>
+      <option value="6">6 vagy magasabb</option>
+      <option value="7">7 vagy magasabb</option>
+      <option value="8">8 vagy magasabb</option>
+      <option value="9">9 vagy magasabb</option>
+      <option value="10">10</option>
+    </select>
+
+    <!-- Frissítés gomb -->
+    <button (click)="refreshMovies()" class="refresh-button" [disabled]="isLoading">
+      Frissítés
+    </button>
+  </div>
+
+  <!-- Skeleton Loader -->
+  <div *ngIf="isLoading" class="movies-grid">
+    <div class="skeleton-card" *ngFor="let _ of [1, 2, 3, 4]">
+      <div class="skeleton-poster shimmer"></div>
+      <div class="skeleton-info">
+        <div class="skeleton-title shimmer"></div>
+        <div class="skeleton-text shimmer"></div>
+        <div class="skeleton-text shimmer"></div>
+        <div class="skeleton-text shimmer"></div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading && ratedMovies.length === 0" class="loading">
+    Betöltés...
+  </div>
+
+  <div *ngIf="!isLoading && ratedMovies.length === 0" class="no-movies">
+    Még nem értékeltél semmilyen filmet{{ ratingFilter !== null ? ' ebben az értékelési tartományban' : '' }}.
+  </div>
+
+  <div *ngIf="!isLoading && ratedMovies.length > 0" class="movies-grid">
+    <div *ngFor="let item of ratedMovies" @fadeIn class="movie-card">
+      <img [src]="getImageUrl(item.movie?.poster_path)" [alt]="item.movie?.title || 'Film poszter'"
+        (click)="navigateToMovie(item.review.movieId)" class="poster" loading="lazy">
+      <div class="movie-info">
+        <h3>{{ item.movie?.title || 'Ismeretlen film' }}</h3>
+        <p class="release-date">Kiadás: {{ item.movie?.release_date || 'N/A' }}</p>
+        <p class="rating">Értékelésed: <span class="rating-value">{{ item.review.rating }}/10</span></p>
+        <p class="comment">Kommented: {{ item.review.comment || 'Nincs komment' }}</p>
+        <p class="created-at">Értékelve: {{ item.review.createdAt | date:'medium' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paginációs gombok -->
+  <div *ngIf="!isLoading && ratedMovies.length > 0" class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1 || isLoading" class="page-button">
+      Előző
+    </button>
+    <button *ngFor="let page of pages" (click)="goToPage(page)" [disabled]="isLoading"
+      [class.active]="page === currentPage" class="page-button">
+      {{ page }}
+    </button>
+    <button (click)="nextPage()" [disabled]="currentPage === pages.length || isLoading" class="page-button">
+      Következő
+    </button>
+  </div>
+</div>

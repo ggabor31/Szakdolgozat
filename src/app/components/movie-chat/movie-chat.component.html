@@ -1,0 +1,12 @@
+<div class="chat-container">
+  <h2>🎬 Movie Chat AI</h2>
+  <textarea [(ngModel)]="userMessage" placeholder="Kérdezz filmekről..."></textarea>
+  <button (click)="sendToAI()" [disabled]="isLoading">
+    {{ isLoading ? 'Válasz betöltése...' : 'Küldés' }}
+  </button>
+
+  <div class="response" *ngIf="aiResponse">
+    <h4>AI válasza:</h4>
+    <p>{{ aiResponse }}</p>
+  </div>
+</div>

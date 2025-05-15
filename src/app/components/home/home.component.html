@@ -1,0 +1,101 @@
+<div class="home-container">
+  <!-- Keresőmező a jobb oldalon -->
+  <div class="search-bar">
+    <input type="text" [(ngModel)]="searchQuery" (input)="searchMovies()" placeholder="Keresés...">
+  </div>
+
+  <!-- Keresési eredmények -->
+  <div *ngIf="searchResults.length > 0" class="section">
+    <h1>Keresési eredmények</h1>
+    <div class="movie-grid">
+      <div class="movie-card" *ngFor="let movie of searchResults">
+        <img [src]="baseImageUrl + movie.poster_path" [alt]="movie.title" [class.hovered]="hoveredMovie === movie"
+          (error)="movie.poster_path = null" (click)="navigateToMovie(movie.id)">
+        <img *ngIf="!movie.poster_path" src="https://via.placeholder.com/200x300?text=Nincs+kép" alt="Nincs kép"
+          (click)="navigateToMovie(movie.id)">
+        <h3>{{ movie.title }}</h3>
+        <p>{{ movie.release_date || 'N/A' }}</p>
+        <div class="actions">
+          <button (click)="toggleWatchlist(movie); $event.stopPropagation()" [disabled]="!currentUser">
+            {{ isInWatchlist(movie.id) ? 'Törlés a watchlistből' : 'Hozzáadás a watchlisthez' }}
+          </button>
+          <button (click)="toggleFavorite(movie); $event.stopPropagation()" [disabled]="!currentUser">
+            {{ isInFavorites(movie.id) ? 'Törlés a kedvencekből' : 'Hozzáadás a kedvencekhez' }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="load-more" *ngIf="currentPage < totalPages">
+      <button (click)="loadMoreResults()">Tovább</button>
+    </div>
+  </div>
+
+  <!-- Legújabb filmek szekció -->
+  <div class="section">
+    <h1>Legújabb filmek</h1>
+    <div class="movie-grid">
+      <div class="movie-card" *ngFor="let movie of latestMovies">
+        <img [src]="baseImageUrl + movie.poster_path" [alt]="movie.title" [class.hovered]="hoveredMovie === movie"
+          (error)="movie.poster_path = null" (click)="navigateToMovie(movie.id)">
+        <img *ngIf="!movie.poster_path" src="https://via.placeholder.com/200x300?text=Nincs+kép" alt="Nincs kép"
+          (click)="navigateToMovie(movie.id)">
+        <h3>{{ movie.title }}</h3>
+        <p>{{ movie.release_date || 'N/A' }}</p>
+        <div class="actions">
+          <button (click)="toggleWatchlist(movie); $event.stopPropagation()" [disabled]="!currentUser">
+            {{ isInWatchlist(movie.id) ? 'Törlés a watchlistből' : 'Hozzáadás a watchlisthez' }}
+          </button>
+          <button (click)="toggleFavorite(movie); $event.stopPropagation()" [disabled]="!currentUser">
+            {{ isInFavorites(movie.id) ? 'Törlés a kedvencekből' : 'Hozzáadás a kedvencekhez' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Népszerű filmek szekció -->
+  <div class="section">
+    <h1>Népszerű filmek</h1>
+    <div class="movie-grid">
+      <div class="movie-card" *ngFor="let movie of popularMovies">
+        <img [src]="baseImageUrl + movie.poster_path" [alt]="movie.title" [class.hovered]="hoveredMovie === movie"
+          (error)="movie.poster_path = null" (click)="navigateToMovie(movie.id)">
+        <img *ngIf="!movie.poster_path" src="https://via.placeholder.com/200x300?text=Nincs+kép" alt="Nincs kép"
+          (click)="navigateToMovie(movie.id)">
+        <h3>{{ movie.title }}</h3>
+        <p>{{ movie.release_date || 'N/A' }}</p>
+        <div class="actions">
+          <button (click)="toggleWatchlist(movie); $event.stopPropagation()" [disabled]="!currentUser">
+            {{ isInWatchlist(movie.id) ? 'Törlés a watchlistből' : 'Hozzáadás a watchlisthez' }}
+          </button>
+          <button (click)="toggleFavorite(movie); $event.stopPropagation()" [disabled]="!currentUser">
+            {{ isInFavorites(movie.id) ? 'Törlés a kedvencekből' : 'Hozzáadás a kedvencekhez' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legjobbra értékelt filmek szekció -->
+  <div class="section">
+    <h1>Legjobbra értékelt filmek</h1>
+    <div class="movie-grid">
+      <div class="movie-card" *ngFor="let movie of topRatedMovies">
+        <img [src]="baseImageUrl + movie.poster_path" [alt]="movie.title" [class.hovered]="hoveredMovie === movie"
+          (error)="movie.poster_path = null" (click)="navigateToMovie(movie.id)">
+        <img *ngIf="!movie.poster_path" src="https://via.placeholder.com/200x300?text=Nincs+kép" alt="Nincs kép"
+          (click)="navigateToMovie(movie.id)">
+        <h3>{{ movie.title }}</h3>
+        <p>{{ movie.release_date || 'N/A' }}</p>
+        <div class="actions">
+          <button (click)="toggleWatchlist(movie); $event.stopPropagation()" [disabled]="!currentUser">
+            {{ isInWatchlist(movie.id) ? 'Törlés a watchlistből' : 'Hozzáadás a watchlisthez' }}
+          </button>
+          <button (click)="toggleFavorite(movie); $event.stopPropagation()" [disabled]="!currentUser">
+            {{ isInFavorites(movie.id) ? 'Törlés a kedvencekből' : 'Hozzáadás a kedvencekhez' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

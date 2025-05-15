@@ -1,0 +1,31 @@
+<div class="list-view-page">
+  <div *ngIf="isLoading">
+    <p>Betöltés....</p>
+  </div>
+  <div *ngIf="!isLoading && list">
+    <h1>{{ list.name }}</h1>
+    <div *ngIf="movies.length === 0">
+      <p>Nincsenek filmek ebben a listában.</p>
+    </div>
+    <div class="movie-list">
+      <div *ngFor="let movie of movies" class="movie-card" (click)="viewMovie(movie)">
+        <img 
+          *ngIf="movie.posterPath" 
+          [src]="'https://image.tmdb.org/t/p/w200' + movie.posterPath" 
+          alt="{{ movie.movieTitle }} borító" 
+          class="movie-poster"
+        />
+        <div class="movie-details">
+          <h4>{{ movie.movieTitle || 'Ismeretlen film' }}</h4>
+          <p>Megjelenés: {{ movie.releaseDate || 'N/A' }}</p>
+          <p>Műfajok: {{ getGenres(movie) }}</p>
+          <p *ngIf="movie.overview" class="overview">
+            {{ movie.overview.length > 100 ? (movie.overview | slice:0:100) + '...' : movie.overview }}
+          </p>
+          <p>Hozzáadva: {{ movie.addedAt | date:'medium' }}</p>
+        </div>
+        <button class="remove-btn" (click)="removeMovie(movie); $event.stopPropagation()">Törlés</button>
+      </div>
+    </div>
+  </div>
+</div>

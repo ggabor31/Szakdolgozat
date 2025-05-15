@@ -1,0 +1,220 @@
+.friends-page {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #fff;
+  background-color: #1a2a44;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+  color: #fff;
+}
+
+.search-section {
+  margin-bottom: 30px;
+}
+
+.search-section input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #2a3b5a;
+  color: #fff;
+}
+
+.search-results {
+  background-color: #2a3b5a;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.search-result {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+}
+
+.search-result button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-result button:hover {
+  background-color: #0056b3;
+}
+
+.requests-section, .friends-section {
+  margin-bottom: 30px;
+}
+
+.friends-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.refresh-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.refresh-btn:hover {
+  background-color: #0056b3;
+}
+
+.friend-request, .friend {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #2a3b5a;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+.friend-request button, .friend span, .friend button {
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.friend-request button:first-child {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.friend-request button:first-child:hover {
+  background-color: #218838;
+}
+
+.friend-request button:last-child {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.friend-request button:last-child:hover {
+  background-color: #c82333;
+}
+
+.friend span {
+  cursor: pointer;
+  flex: 1;
+}
+
+.friend span:hover {
+  text-decoration: underline;
+}
+
+.friend.selected {
+  background-color: #3a4b6a;
+  border-left: 4px solid #007bff;
+}
+
+.friend .remove-friend-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.friend .remove-friend-btn:hover {
+  background-color: #c82333;
+}
+
+.friend-details {
+  background-color: #2a3b5a;
+  padding: 20px;
+  border-radius: 4px;
+}
+
+.profile-section {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.profile-picture {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-right: 20px;
+  object-fit: cover;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-info h3 {
+  margin: 0 0 15px;
+}
+
+.bio-box {
+  background-color: #3a4b6a;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.bio-box p {
+  margin: 0;
+}
+
+.bio-box .no-bio {
+  color: #ccc;
+  font-style: italic;
+}
+
+.movie-list, .review-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.movie-card, .review-card {
+  background-color: #3a4b6a;
+  border-radius: 8px;
+  width: 300px;
+  padding: 10px;
+  display: flex;
+  align-items: flex-start;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.movie-poster {
+  width: 100px;
+  height: auto;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.movie-details, .review-details {
+  flex: 1;
+}
+
+.movie-details h4, .review-details h4 {
+  margin: 0 0 5px;
+  font-size: 1.1em;
+}
+
+.movie-details p, .review-details p {
+  margin: 5px 0;
+  font-size: 0.9em;
+}

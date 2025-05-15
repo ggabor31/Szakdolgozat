@@ -1,0 +1,43 @@
+<div class="auth-container">
+    <h2>Bejelentkezés</h2>
+    <form (ngSubmit)="login()" #loginForm="ngForm">
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="Add meg az email címed"
+          required
+          email
+          #emailInput="ngModel"
+        >
+        <p *ngIf="emailInput.invalid && emailInput.touched" class="error">
+          <span *ngIf="emailInput.errors?.['required']">Az email kötelező!</span>
+          <span *ngIf="emailInput.errors?.['email']">Érvénytelen email formátum!</span>
+        </p>
+      </div>
+      <div class="form-group">
+        <label for="password">Jelszó:</label>
+        <input
+          type="password"
+          id="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Add meg a jelszavad"
+          required
+          minlength="6"
+          #passwordInput="ngModel"
+        >
+        <p *ngIf="passwordInput.invalid && passwordInput.touched" class="error">
+          <span *ngIf="passwordInput.errors?.['required']">A jelszó kötelező!</span>
+          <span *ngIf="passwordInput.errors?.['minlength']">A jelszó minimum 6 karakter legyen!</span>
+        </p>
+      </div>
+      <button type="submit" [disabled]="loginForm.invalid">Bejelentkezés</button>
+    </form>
+    <p class="link-text">
+      Nincs még fiókod? <a (click)="navigateToRegister()">Regisztrálj itt</a>
+    </p>
+  </div>

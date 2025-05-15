@@ -1,0 +1,112 @@
+<div class="friends-page">
+  <h1>Barátok Kezelése</h1>
+
+  <div class="search-section">
+    <h2>Felhasználók Keresése</h2>
+    <input 
+      type="text" 
+      placeholder="Keresés felhasználónev alapján..." 
+      [(ngModel)]="searchQuery" 
+      (input)="searchUsers()"
+    />
+    <div *ngIf="searchResults.length > 0" class="search-results">
+      <div *ngFor="let user of searchResults" class="search-result">
+        <span>{{ user.username || 'Névtelen' }}</span>
+        <button (click)="sendFriendRequest(user.id)">Barátkérés Küldése</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="requests-section">
+    <h2>Bejövő Barátkérések</h2>
+    <div *ngIf="pendingRequests.length === 0">
+      <p>Nincsenek függőben lévő barátkérések.</p>
+    </div>
+    <div *ngFor="let request of pendingRequests" class="friend-request">
+      <span>{{ request.fromUsername || 'Ismeretlen felhasználó' }}</span>
+      <button (click)="acceptFriendRequest(request)">Elfogadás</button>
+      <button (click)="rejectFriendRequest(request)">Elutasítás</button>
+    </div>
+  </div>
+
+  <div class="friends-section">
+    <div class="friends-header">
+      <h2>Barátok</h2>
+      <button class="refresh-btn" (click)="refreshData()">Frissítés</button>
+    </div>
+    <div *ngIf="isLoading">
+      <p>Betöltés...</p>
+    </div>
+    <div *ngIf="!isLoading && friends.length === 0">
+      <p>Nincsenek függőben lévő barátkérések.</p>
+    </div>
+    <div *ngFor="let friend of friends" class="friend" [class.selected]="selectedFriend?.friendId === friend.friendId">
+      <span (click)="selectFriend(friend)">{{ friend.username }}</span>
+      <button class="remove-friend-btn" (click)="removeFriend(friend)">Törlés</button>
+    </div>
+  </div>
+
+  <div *ngIf="selectedFriend" class="friend-details">
+    <h2>Bemutatkozás</h2>
+    <div *ngIf="friendProfile" class="profile-section">
+      <img 
+        *ngIf="friendProfile.profilePicture" 
+        [src]="friendProfile.profilePicture" 
+        alt="Profilkép" 
+        class="profile-picture"
+      />
+      <div class="profile-info">
+        <h3>{{ friendProfile.username || 'Névtelen' }}</h3>
+        <div class="bio-box">
+          <p *ngIf="friendProfile.bio != null && friendProfile.bio !== ''; else noBio">
+            {{ friendProfile.bio }}
+          </p>
+          <ng-template #noBio>
+            <p class="no-bio">Nincs bemutatkozás.</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <h2>Értékelt Filmek</h2>
+    <div *ngIf="friendRatedMovies.length === 0">
+      <p>Nem értékelt még filmeket.</p>
+    </div>
+    <div class="movie-list">
+      <div *ngFor="let movie of friendRatedMovies" class="movie-card">
+        <img 
+          *ngIf="movie.posterPath" 
+          [src]="'https://image.tmdb.org/t/p/w200' + movie.posterPath" 
+          alt="{{ movie.movieTitle }} borító" 
+          class="movie-poster"
+        />
+        <div class="movie-details">
+          <h4>{{ movie.movieTitle || 'Ismeretlen film' }}</h4>
+          <p>Megjelenés: {{ movie.releaseDate || 'N/A' }}</p>
+          <p>Értékelés: {{ movie.rating }}/10</p>
+        </div>
+      </div>
+    </div>
+
+    <h2>Vélemények</h2>
+    <div *ngIf="friendReviews.length === 0">
+      <p>Nincsenek vélemények.</p>
+    </div>
+    <div class="review-list">
+      <div *ngFor="let review of friendReviews" class="review-card">
+        <img 
+          *ngIf="review.posterPath" 
+          [src]="'https://image.tmdb.org/t/p/w200' + review.posterPath" 
+          alt="{{ review.movieTitle }} borító" 
+          class="movie-poster"
+        />
+        <div class="review-details">
+          <h4>{{ review.movieTitle || 'Ismeretlen film' }}</h4>
+          <p>Megjelenés: {{ review.releaseDate || 'N/A' }}</p>
+          <p>Értékelés: {{ review.rating || 'N/A' }}/10</p>
+          <p>{{ review.reviewText || 'Nincs szöveges vélemény.' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

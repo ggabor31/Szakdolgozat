@@ -1,0 +1,81 @@
+<div class="profile-container" *ngIf="user; else notLoggedIn">
+  <h2>Profil</h2>
+  <div class="profile-info">
+    <img *ngIf="userData?.profilePicture" [src]="userData.profilePicture" alt="Profilkép" class="profile-picture">
+    <p><strong>Felhasználónév:</strong> {{ userData?.username || 'N/A' }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Bio:</strong> {{ userData?.bio || 'Még nem adtál meg bio-t.' }}</p>
+  </div>
+
+  <h3>Profil szerkesztése</h3>
+  <form (ngSubmit)="updateProfile()">
+    <div class="form-group">
+      <label for="bio">Rövid Bio:</label>
+      <textarea id="bio" [(ngModel)]="newBio" name="bio" maxlength="200" placeholder="Írj magadról pár mondatot..."></textarea>
+    </div>
+    <div class="form-group">
+      <label for="profilePicture">Új profilkép:</label>
+      <input type="file" id="profilePicture" (change)="onFileChange($event)" accept="image/*">
+    </div>
+    <button type="submit">Frissítés</button>
+  </form>
+
+  <h3>Jelszó módosítása</h3>
+  <form (ngSubmit)="updatePassword()">
+    <div class="form-group">
+      <label for="newPassword">Új jelszó:</label>
+      <input type="password" id="newPassword" [(ngModel)]="newPassword" name="newPassword" placeholder="Add meg az új jelszót">
+    </div>
+    <button type="submit">Jelszó frissítése</button>
+  </form>
+
+  <h3>Watchlist</h3>
+  <div class="sort-options">
+    <label for="watchlistSort">Rendezés:</label>
+    <select id="watchlistSort" [(ngModel)]="watchlistSortOption" (change)="onWatchlistSortChange($event)">
+      <option value="added-desc">Hozzáadás szerint (legújabb elöl)</option>
+      <option value="added-asc">Hozzáadás szerint (legrégebbi elöl)</option>
+      <option value="title-asc">Cím szerint (A-Z)</option>
+    </select>
+  </div>
+  <div class="movie-scroll" *ngIf="watchlist.length > 0; else noWatchlist">
+    <div *ngFor="let movie of watchlist" class="movie-card">
+      <img [src]="'https://image.tmdb.org/t/p/w200' + movie.poster_path" [alt]="movie.title"
+        (click)="navigateToMovie(movie.movieId)" class="poster">
+      <h4>{{ movie.title }}</h4>
+      <p>{{ movie.release_date || 'N/A' }}</p>
+      <button (click)="removeFromWatchlist(movie.movieId)">Törlés</button>
+    </div>
+  </div>
+  <ng-template #noWatchlist>
+    <p>Nincs film a watchlistben.</p>
+  </ng-template>
+
+  <h3>Kedvencek</h3>
+  <div class="sort-options">
+    <label for="favoritesSort">Rendezés:</label>
+    <select id="favoritesSort" [(ngModel)]="favoritesSortOption" (change)="onFavoritesSortChange($event)">
+      <option value="added-desc">Hozzáadás szerint (legújabb elöl)</option>
+      <option value="added-asc">Hozzáadás szerint (legrégebbi elöl)</option>
+      <option value="title-asc">Cím szerint (A-Z)</option>
+    </select>
+  </div>
+  <div class="movie-scroll" *ngIf="favorites.length > 0; else noFavorites">
+    <div *ngFor="let movie of favorites" class="movie-card">
+      <img [src]="'https://image.tmdb.org/t/p/w200' + movie.poster_path" [alt]="movie.title"
+        (click)="navigateToMovie(movie.movieId)" class="poster">
+      <h4>{{ movie.title }}</h4>
+      <p>{{ movie.release_date || 'N/A' }}</p>
+      <button (click)="removeFromFavorites(movie.movieId)">Törlés</button>
+    </div>
+  </div>
+  <ng-template #noFavorites>
+    <p>Nincs film a kedvencekben.</p>
+  </ng-template>
+</div>
+
+<ng-template #notLoggedIn>
+  <div class="not-logged-in">
+    <p>Kérlek, jelentkezz be a profil megtekintéséhez!</p>
+  </div>
+</ng-template>

@@ -1,0 +1,206 @@
+<div class="movie-detail-container">
+  <!-- Trailer szekció -->
+  <div class="trailer-section" *ngIf="trailerUrl">
+    <h3>Trailer</h3>
+    <div class="trailer-container">
+      <iframe [src]="trailerUrl" frameborder="0" allowfullscreen
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+    </div>
+  </div>
+
+  <!-- Film részletei -->
+  <div class="movie-header" *ngIf="movie">
+    <div class="movie-poster">
+      <img [src]="getImageUrl(movie.poster_path)" [alt]="movie.title || 'Nincs cím'">
+    </div>
+    <div class="movie-info">
+      <h1>{{ movie.title }}</h1>
+      <p><strong>Megjelenés dátuma:</strong> {{ movie.release_date || 'N/A' }}</p>
+      <p><strong>Értékelés (TMDb):</strong> {{ movie.vote_average }}/10</p>
+      <p>
+        <strong>Felhasználói átlagértékelés:</strong>
+        <span class="average-rating-wrapper">
+          <span class="popcorn-rating average-rating">
+            <span *ngFor="let popcorn of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; let i = index" class="popcorn">
+              <span class="popcorn-icon" [ngClass]="{'filled': i + 1 <= roundedAverageRating}">🍿</span>
+            </span>
+          </span>
+          <span class="average-rating-text">
+            {{ averageRating > 0 ? (averageRating.toFixed(1) + '/10') : 'Még nincs értékelés' }}
+          </span>
+        </span>
+      </p>
+      <p><strong>Műfajok:</strong> {{ genresString }}</p>
+      <p><strong>Leírás:</strong> {{ movie.overview || 'N/A' }}</p>
+      <div class="action-buttons">
+        <button (click)="addToWatchlist()" [ngClass]="{'in-list': isInWatchlist}">
+          {{ isInWatchlist ? 'Törlés a watchlistből' : 'Hozzáadás a watchlisthez' }}
+        </button>
+        <button (click)="addToFavorites()" [ngClass]="{'in-favorites': isInFavorites}">
+          {{ isInFavorites ? 'Törlés a kedvencekből' : 'Hozzáadás a kedvencekhez' }}
+        </button>
+        <!-- Lista hozzáadási szekció -->
+        <div class="add-to-list">
+          <select [(ngModel)]="selectedList">
+            <option value="" disabled selected>Válassz listát...</option>
+            <option *ngFor="let list of lists" [value]="list.id">{{ list.name }}</option>
+          </select>
+          <button (click)="addToList()">Hozzáadás</button>
+          <!-- Új lista létrehozása -->
+          <div class="create-new-list">
+            <input type="text" [(ngModel)]="newListName" placeholder="Új lista neve...">
+            <button (click)="createNewList()">➕ Új lista</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Értékelési űrlap -->
+  <div class="review-section">
+    <h3>Értékeld a filmet</h3>
+    <div *ngIf="user; else loginPrompt">
+      <div *ngIf="!hasUserReviewed; else alreadyReviewed">
+        <div class="rating-input">
+          <label>Értékelés:</label>
+          <div class="popcorn-rating">
+            <span *ngFor="let popcorn of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; let i = index" class="popcorn">
+              <span class="popcorn-icon"
+                [ngClass]="{'filled': i + 1 <= (userRatingHover > 0 ? userRatingHover : userRating)}"
+                (click)="setRating(i + 1)" (mouseenter)="setUserRatingHover(i + 1)"
+                (mouseleave)="resetUserRatingHover()">🍿</span>
+            </span>
+          </div>
+          <div class="rating-description">
+            {{ userRating === 0 ? 'Értékelés kiválasztása...' :
+            userRating <= 2 ? userRating + ' popcorn – Nagyon rossz' : userRating <=4 ? userRating + ' popcorn – Gyenge'
+              : userRating <=6 ? userRating + ' popcorn – Elmegy' : userRating <=8 ? userRating + ' popcorn – Jó' :
+              userRating + ' popcorn – Kiváló' }} </div>
+          </div>
+          <div class="comment-input">
+            <label for="comment">Komment:</label>
+            <textarea id="comment" [(ngModel)]="userComment" rows="4" required></textarea>
+          </div>
+          <button (click)="submitReview()">Értékelés beküldése</button>
+        </div>
+        <ng-template #alreadyReviewed>
+          <p>Már leadtál értékelést erre a filmre. Módosíthatod vagy törölheted a "Felhasználói vélemények" szekcióban.
+          </p>
+        </ng-template>
+      </div>
+      <ng-template #loginPrompt>
+        <p>Kérlek, jelentkezz be az értékeléshez és kommenteléshez!</p>
+      </ng-template>
+    </div>
+
+    <!-- Kommentek szekció -->
+    <div class="reviews-section" *ngIf="reviews.length > 0">
+      <h3>Felhasználói vélemények</h3>
+      <div class="review-list">
+        <div *ngFor="let review of reviews" class="review-item" [ngClass]="{'editing': editingReviewId === review.id}">
+          <!-- Normál nézet -->
+          <div *ngIf="editingReviewId !== review.id; else editMode">
+            <div class="review-header">
+              <img *ngIf="review.profilePicture" [src]="review.profilePicture" alt="Profilkép" class="reviewer-avatar">
+              <div class="reviewer-info">
+                <p class="reviewer-name">{{ review.userName }}</p>
+                <p class="review-date">{{ review.createdAt | date:'medium' }}</p>
+              </div>
+            </div>
+            <p class="review-rating"><strong>Értékelés:</strong>
+              <span class="popcorn-rating">
+                <span *ngFor="let popcorn of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; let i = index" class="popcorn">
+                  <span class="popcorn-icon" [ngClass]="{'filled': i + 1 <= review.rating}">🍿</span>
+                </span>
+              </span>
+              {{ review.rating }}/10
+            </p>
+            <p class="review-comment">{{ review.comment }}</p>
+            <div class="review-actions" *ngIf="user && review.userId === user.uid">
+              <button class="edit-btn" (click)="editReview(review)">
+                <span class="edit-icon">✏️</span> Módosítás
+              </button>
+              <button class="delete-btn" (click)="deleteReview(review.id)">Törlés</button>
+            </div>
+          </div>
+          <!-- Szerkesztési mód -->
+          <ng-template #editMode>
+            <div class="edit-review">
+              <div class="review-header">
+                <img *ngIf="review.profilePicture" [src]="review.profilePicture" alt="Profilkép"
+                  class="reviewer-avatar">
+                <div class="reviewer-info">
+                  <p class="reviewer-name">{{ review.userName }}</p>
+                  <p class="review-date">{{ review.createdAt | date:'medium' }}</p>
+                </div>
+              </div>
+              <div class="rating-input">
+                <label>Értékelés:</label>
+                <div class="popcorn-rating">
+                  <span *ngFor="let popcorn of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; let i = index" class="popcorn">
+                    <span class="popcorn-icon"
+                      [ngClass]="{'filled': i + 1 <= (editingRatingHover > 0 ? editingRatingHover : editingRating)}"
+                      (click)="setEditingRating(i + 1)" (mouseenter)="setEditingRatingHover(i + 1)"
+                      (mouseleave)="resetEditingRatingHover()">🍿</span>
+                  </span>
+                </div>
+                <div class="rating-description">
+                  {{ editingRating === 0 ? 'Értékelés kiválasztása...' :
+                  editingRating <= 2 ? editingRating + ' popcorn – Nagyon rossz' : editingRating <=4 ? editingRating
+                    + ' popcorn – Gyenge' : editingRating <=6 ? editingRating + ' popcorn – Elmegy' : editingRating <=8
+                    ? editingRating + ' popcorn – Jó' : editingRating + ' popcorn – Kiváló' }} </div>
+                </div>
+                <div class="comment-input">
+                  <label for="edit-comment">Komment:</label>
+                  <textarea id="edit-comment" [(ngModel)]="editingComment" rows="6" required
+                    placeholder="Írd meg a módosított véleményed..."></textarea>
+                </div>
+                <div class="edit-actions">
+                  <button class="save-btn" (click)="saveReview(review.id)">Mentés</button>
+                  <button class="cancel-btn" (click)="cancelEdit()">Mégse</button>
+                </div>
+              </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <!-- Színészek szekció -->
+    <div *ngIf="credits && credits.cast.length > 0" class="credits-section">
+      <h3>Színészek</h3>
+      <div class="cast-list">
+        <div *ngFor="let actor of credits.cast | slice:0:5" class="cast-item">
+          <img [src]="getImageUrl(actor.profile_path)" [alt]="actor.name || 'Nincs név'"
+            (error)="actor.profile_path = null">
+          <p>{{ actor.name }}</p>
+          <p class="character">{{ actor.character }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stáb szekció (pl. rendező) -->
+    <div *ngIf="credits && credits.crew.length > 0" class="crew-section">
+      <h3>Stáb</h3>
+      <div class="crew-list">
+        <div *ngFor="let member of credits.crew | slice:0:3" class="crew-item">
+          <p>{{ member.name }} - {{ member.job }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hasonló filmek szekció -->
+    <div *ngIf="similarMovies && similarMovies.length > 0" class="similar-movies-section">
+      <h3>Hasonló filmek</h3>
+      <div class="movie-grid">
+        <div *ngFor="let movie of similarMovies | slice:0:5" class="movie-card">
+          <img [src]="getImageUrl(movie.poster_path)" [alt]="movie.title || 'Nincs cím'"
+            (error)="movie.poster_path = null" (click)="navigateToMovie(movie.id)">
+          <h4>{{ movie.title }}</h4>
+          <p>{{ movie.release_date || 'N/A' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="movieId">
+    <app-chat [movieId]="movieId"></app-chat>
+  </div>

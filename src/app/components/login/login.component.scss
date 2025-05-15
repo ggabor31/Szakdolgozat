@@ -1,0 +1,97 @@
+.auth-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    background: linear-gradient(135deg, #2a2a2a, #1f1f1f); // Gradiens háttér
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    text-align: center;
+  
+    h2 {
+      margin-bottom: 20px;
+      color: #007bff; // Kék cím
+      font-size: 24px;
+      font-weight: 500;
+    }
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+  
+    label {
+      display: block;
+      color: #007bff; // Kék címkék
+      margin-bottom: 8px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+  
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #444;
+      border-radius: 4px;
+      background-color: #333;
+      color: #fff;
+      font-size: 16px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+  
+      &:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+      }
+  
+      &::placeholder {
+        color: #888;
+        font-style: italic;
+      }
+    }
+  
+    .error {
+      color: #dc3545;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+  }
+  
+  button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.3s;
+  
+    &:disabled {
+      background-color: #555;
+      cursor: not-allowed;
+    }
+  
+    &:hover:not(:disabled) {
+      background-color: #0056b3;
+      transform: translateY(-2px); // Kicsi emelés hoverkor
+    }
+  }
+  
+  .link-text {
+    margin-top: 20px;
+    color: #bbb;
+    font-size: 14px;
+  
+    a {
+      color: #007bff;
+      text-decoration: none;
+      cursor: pointer;
+  
+      &:hover {
+        text-decoration: underline;
+        color: #0056b3;
+      }
+    }
+  }

@@ -1,0 +1,59 @@
+<div class="lists-page">
+  <h2>Listáim</h2>
+
+  <button class="btn btn-success mb-3" (click)="toggleCreateForm()">
+    {{ showCreateForm ? 'Mégse' : 'Új lista' }}
+  </button>
+
+  <div *ngIf="showCreateForm" class="create-form mb-3">
+    <input
+      type="text"
+      [(ngModel)]="newListName"
+      placeholder="Új lista neve"
+      class="form-control mb-2"
+    />
+    <button class="btn btn-primary" (click)="createList()">Létrehozás</button>
+    <div *ngIf="errorMessage" class="text-danger mt-2">{{ errorMessage }}</div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Betöltés...</div>
+
+  <div *ngIf="!isLoading && lists.length === 0" class="no-lists">
+    Még nincsenek listáid.
+  </div>
+
+  <div *ngIf="!isLoading && lists.length > 0" class="list-group">
+    <div *ngFor="let list of lists" class="list-item">
+      <div *ngIf="editingList?.id !== list.id" class="list-content">
+        <span (click)="viewList(list)">{{ list.name }}</span>
+        <div class="actions">
+          <button class="btn btn-sm btn-primary" (click)="startEditing(list)">Szerkesztés</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteList(list)">Törlés</button>
+        </div>
+      </div>
+
+      <div *ngIf="editingList && editingList.id === list.id" class="edit-form">
+        <input
+          type="text"
+          [(ngModel)]="editingList.name"
+          class="form-control mb-2"
+        />
+        <button class="btn btn-sm btn-success" (click)="saveListName()">Mentés</button>
+        <button class="btn btn-sm btn-secondary" (click)="cancelEditing()">Mégse</button>
+        <div *ngIf="errorMessage" class="text-danger mt-2">{{ errorMessage }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Megerősítő panel -->
+  <div *ngIf="showConfirmDialog && confirmMessage" class="confirm-dialog-overlay">
+    <div class="confirm-dialog">
+      <h3>Megerősítés</h3>
+      <p>{{ confirmMessage }}</p>
+      <div class="confirm-buttons">
+        <button class="btn btn-danger" (click)="confirmDelete(true)">Törlés</button>
+        <button class="btn btn-secondary" (click)="confirmDelete(false)">Mégse</button>
+      </div>
+    </div>
+  </div>
+</div>

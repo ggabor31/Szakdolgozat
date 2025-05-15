@@ -1,0 +1,90 @@
+.chat-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #1e1e2f; // sötét, modern háttér
+  border-radius: 15px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  color: #eee;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  h2 {
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: #ff6f61; // hangsúlyos szín
+    text-align: center;
+  }
+
+  textarea {
+    width: 100%;
+    height: 120px;
+    padding: 1rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    resize: vertical;
+    background: #2c2c44;
+    color: #eee;
+    box-shadow: inset 0 0 5px rgba(255, 111, 97, 0.4);
+    transition: box-shadow 0.3s ease;
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 8px 2px #ff6f61;
+      background: #39395a;
+    }
+
+    &::placeholder {
+      color: #bbb;
+      font-style: italic;
+    }
+  }
+
+  button {
+    margin-top: 1rem;
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    background: #ff6f61;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(255, 111, 97, 0.6);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover:not(:disabled) {
+      background: #ff4a3d;
+      box-shadow: 0 6px 16px rgba(255, 74, 61, 0.8);
+    }
+
+    &:disabled {
+      background: #a06a61;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  }
+
+  .response {
+    margin-top: 2rem;
+    background: #2c2c44;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+    h4 {
+      margin-bottom: 0.75rem;
+      color: #ff6f61;
+      font-weight: 700;
+    }
+
+    p {
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #ddd;
+      white-space: pre-wrap; // ha több soros a válasz, szép legyen
+    }
+  }
+}

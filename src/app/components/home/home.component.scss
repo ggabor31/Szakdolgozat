@@ -1,0 +1,126 @@
+.home-container {
+  padding: 20px;
+  background-color: #1a2a44; // Sötét háttér
+  color: #fff;
+  position: relative;
+  min-height: 100vh;
+}
+
+.search-bar {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  input {
+    padding: 8px 12px;
+    width: 250px;
+    border: none;
+    border-radius: 20px; // Kerekített sarkok, modernebb kinézet
+    background-color: #2a4066; // Sötét háttér a keresőmezőnek
+    color: #fff;
+    outline: none;
+    transition: background-color 0.3s;
+
+    &::placeholder {
+      color: #ccc; // Halványabb placeholder szöveg
+    }
+
+    &:focus {
+      background-color: #3a5076; // Sötétebb árnyalat fókuszban
+    }
+  }
+}
+
+.section {
+  margin-top: 60px; // Hagy helyet a keresőmezőnek
+  margin-bottom: 40px;
+
+  h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+}
+
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); // Egy sorban 5 oszlop
+  gap: 20px; // Térköz a kártyák között
+  max-width: 1200px; // Maximális szélesség
+  margin: 0 auto; // Középre igazítás
+}
+
+.movie-card {
+  text-align: center;
+  background-color: #2a4066; // Sötét kártya háttér
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05); // Kicsi nagyítás hover esetén
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+
+    &.hovered {
+      border: 2px solid #007bff; // Hover effektus
+    }
+  }
+
+  h3 {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #fff;
+  }
+
+  p {
+    margin: 0;
+    color: #ccc;
+    font-size: 14px;
+  }
+
+  .actions {
+    margin-top: 10px;
+
+    button {
+      display: block;
+      width: 100%;
+      margin: 5px 0;
+      padding: 5px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+
+      &:first-child {
+        background-color: #007bff; // Kék gomb a watchlisthez
+      }
+
+      &:last-child {
+        background-color: #28a745; // Zöld gomb a kedvencekhez
+      }
+
+      &:disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+.load-more {
+  text-align: center;
+  margin-top: 20px;
+
+  button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+}

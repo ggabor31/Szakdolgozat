@@ -1,0 +1,42 @@
+<div class="chat-wrapper">
+  <!-- Értesítés -->
+  <div class="notification" *ngIf="showNotification"
+    [ngClass]="{'fade-in': showNotification, 'fade-out': !showNotification}">
+    <span class="notification-icon">🍿</span>
+    <span class="notification-message">{{ notificationMessage }}</span>
+    <button class="close-notification" (click)="showNotification = false">✖</button>
+  </div>
+
+  <!-- Lebegő Chat Gomb -->
+  <button class="chat-toggle-btn" (click)="toggleChat()">
+    <span *ngIf="!isChatOpen" class="chat-icon">🍿</span>
+    <span *ngIf="isChatOpen" class="close-icon">✖</span>
+  </button>
+
+  <!-- Felugró Chat Ablak -->
+  <div class="chat-modal" *ngIf="isChatOpen">
+    <div class="chat-header">
+      <h3>Chat a filmről 🎬</h3>
+      <button class="close-btn" (click)="toggleChat()">✖</button>
+    </div>
+    <div class="chat-messages">
+      <div *ngFor="let message of messages" class="message" [ngClass]="{'own-message': message.userId === user?.uid}">
+        <div class="message-header">
+          <span class="user-name">{{ message.userName }}</span>
+          <span class="message-date">{{ message.createdAt | date:'short' }}</span>
+        </div>
+        <div class="message-content">
+          {{ message.message }}
+        </div>
+      </div>
+      <!-- Ha nincs üzenet, jelenítsünk meg egy üzenetet -->
+      <div *ngIf="messages.length === 0" class="no-messages">
+        Még nincsenek üzenetek. Légy az első, aki ír! 🍿
+      </div>
+    </div>
+    <div class="chat-input">
+      <input type="text" [(ngModel)]="newMessage" (keyup.enter)="sendMessage()" placeholder="Írj a filmről..." />
+      <button (click)="sendMessage()" class="send-btn">🎬</button>
+    </div>
+  </div>
+</div>
